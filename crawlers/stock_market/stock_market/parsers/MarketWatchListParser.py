@@ -13,14 +13,18 @@ class MarketWatchListParser:
         for row in rows:
             # columns: Name (with url) | Symbol | Sector|
             cells = row.find_all('td')
-            name = cells[0].text.strip()
             url = cells[0].find('a')['href']
-            symbol = cells[1].text.strip()
+            full_name = cells[0].text.strip()
+            full_name_split = full_name.split("(")
+            name = full_name_split[0].strip()
+            symbol = full_name_split[1].replace(")", "")
+            exchange = cells[1].text.strip()
             sector = cells[2].text.strip()
             stock = {
                 "name": name,
                 "url": url,
                 "symbol": symbol,
+                "exchange": exchange,
                 "sector": sector,
             }
             stocks.append(stock)
