@@ -18,9 +18,13 @@ For development purposes:
 
 ## Libraries
 
-This API is built using 
+This API is built using:
 - [FastAPI](https://fastapi.tiangolo.com/) as the backend.
 - [Poetry](https://python-poetry.org/) as dependency manager
+
+The crawlers were built using:
+- [Scrapy] (https://scrapy.org/)
+- [BeautifulSoup] (https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 
 ## Requirements
 - Python 3.10
