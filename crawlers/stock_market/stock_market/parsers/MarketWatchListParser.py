@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 
 class MarketWatchListParser:
 
-    @staticmethod
-    def parse_page(page):
+    def parse(self, page):
         soup = BeautifulSoup(page, "html.parser")
         table = soup.find('table', class_="table table-condensed")
         rows = table.find_all('tr')[1:]  # Skip header
