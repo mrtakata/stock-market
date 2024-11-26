@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "stock-market-crawlers"
+version = "0.1.0"
+description = ""
+authors = ["Matheus Takata <matheus.takata@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Scrapy = "^2.12.0"
+python-dotenv = "^1.0.1"
+beautifulsoup4 = "^4.12.3"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.29.0"
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
