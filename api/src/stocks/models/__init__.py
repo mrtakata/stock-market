@@ -3,7 +3,7 @@ from .MarketCap import MarketCap
 from .Performance import Performance
 from .Stock import Stock
 from .StockUpdate import StockUpdate
-from .StockValues import StockValues
+from .StockValue import StockValue
 
 
 __all__ = [
@@ -12,5 +12,5 @@ __all__ = [
     "Performance",
     "Stock",
     "StockUpdate",
-    "StockValues",
+    "StockValue",
 ]

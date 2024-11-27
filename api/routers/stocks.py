@@ -2,8 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
+from sqlalchemy.orm import selectinload
 
-from api.src.stocks.models import *
+from api.src.stocks.models import Stock, StockUpdate
 from api.database import get_session
 
 SessionDep = Annotated[Session, Depends(get_session)]
@@ -16,8 +17,12 @@ router = APIRouter(
 
 @router.get("/{stock_symbol}")
 async def get_stock(stock_symbol: str, session: SessionDep):
-    # TODO: Implements connection to DB
-    stock = session.exec(select(Stock).where(Stock.company_code == stock_symbol)).one()
+    statement = select(Stock).where(Stock.company_code == stock_symbol).options(
+            selectinload(Stock.performance_data),
+            selectinload(Stock.stock_values),
+            selectinload(Stock.market_cap)
+        )
+    stock = session.exec(statement).one_or_none()
     if stock is None:
         raise HTTPException(status_code=404, detail="Stock not found")
 
@@ -26,8 +31,12 @@ async def get_stock(stock_symbol: str, session: SessionDep):
 
 @router.post("/{stock_symbol}")
 async def update_stock(stock_symbol: str, update_data: StockUpdate, session: SessionDep):
-    stock = session.exec(select(Stock).where(Stock.company_code == stock_symbol)).one()
-    print(stock)
+    statement = select(Stock).where(Stock.company_code == stock_symbol)
+    stock = session.exec(statement).one_or_none()
+    if stock is None:
+        raise HTTPException(status_code=404, detail="Stock not found")
+    
+
     stock.purchased_amount += update_data.amount
     stock.purchased_status = "Purchased"
 
