@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 
+BASE_URL = "https://www.marketwatch.com/investing/Stock/"
+
 
 class MarketWatchListParser:
 
@@ -15,14 +17,14 @@ class MarketWatchListParser:
             url = cells[0].find('a')['href']
             full_name = cells[0].text.strip()
             full_name_split = full_name.split("(")
-            name = full_name_split[0].strip()
-            symbol = full_name_split[1].replace(")", "")
+            company_name = full_name_split[0].strip()
+            company_code = url.replace(BASE_URL, "").replace("?countryCode=US", "")
             exchange = cells[1].text.strip()
             sector = cells[2].text.strip()
             stock = {
-                "name": name,
+                "company_name": company_name,
                 "url": url,
-                "symbol": symbol,
+                "company_code": company_code,
                 "exchange": exchange,
                 "sector": sector,
             }

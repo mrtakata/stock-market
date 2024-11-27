@@ -1,4 +1,12 @@
 from bs4 import BeautifulSoup
+import re
+
+SYMBOL_NUMBER_MAP = {
+    "K": 1000,
+    "M": 1000000,
+    "B": 1000000000,
+    "T": 1000000000000
+}
 
 
 class MarketWatchPageParser:
@@ -8,9 +16,11 @@ class MarketWatchPageParser:
         soup = BeautifulSoup(page, "html.parser")
         competitors = self.get_competitors(soup)
         performance = self.get_performance(soup)
+        market_cap = self.get_market_cap(soup)
         data = {
             "competitors": competitors,
-            "performance": performance
+            "performance": performance,
+            "market_cap": market_cap,
         }
         return data
 
@@ -60,3 +70,28 @@ class MarketWatchPageParser:
             competitors.append(competitor_name)
 
         return competitors
+    
+
+    def get_market_cap(self, soup):
+        market_cap = {
+            "currency": "",
+            "value": 0.0
+        }
+        try:
+            market_cap_tag = soup.find(string=re.compile("Market Cap", re.I)).find_next('span')
+
+            market_cap_text = market_cap_tag.text.strip()
+            currency = market_cap_text[0]
+            value = market_cap_text[1:-1]
+            value = value.replace(',', '')
+            value_symbol = market_cap_text[-1]
+            value = float(value) * SYMBOL_NUMBER_MAP[value_symbol]
+            market_cap = {
+                "currency": currency,
+                "value": value
+            }
+        except Exception as e:
+            print(e)
+            return None
+
+        return market_cap

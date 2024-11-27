@@ -58,7 +58,8 @@ class MarketWatchSpider(scrapy.Spider):
     }
     
     def start_requests(self):
-        for i in range(1, TOTAL_PAGES + 1):
+        # for i in range(1, TOTAL_PAGES + 1):
+        for i in range(1, 3 + 1):
             yield scrapy.Request(
                 f"{BASE_URL}{i}",
                 headers=self.headers,

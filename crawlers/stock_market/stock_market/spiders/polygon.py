@@ -8,23 +8,30 @@ POLYGON_API_KEY = os.getenv("POLYGON_API_KEY")
 
 
 BASE_URL = "https://api.polygon.io/v1/open-close"
-
+STOCKS_PATH = "market_watch.jl"
 
 class PolygonSpider(scrapy.Spider):
     name = "polygon"
     allowed_domains = ["api.polygon.io"]
 
 
-    def __init__(self, date="2024-11-20", **kwargs):
+    def __init__(self, date="2024-11-21", **kwargs):
         self.date = date
-        with open("mock_data/stocks.json") as f:
-            self.stocks = json.load(f)
 
+    def get_stocks(self):
+        data = []
+        with open(STOCKS_PATH, 'r') as f:
+            for stock_str in f.readlines():
+                stock = json.loads(stock_str)
+                data.append(stock)
+
+        return data
 
     def start_requests(self):
-        for stock in self.stocks:
+        stocks = self.get_stocks()
+        for stock in stocks:
             yield scrapy.Request(
-                f"{BASE_URL}/{stock['symbol']}/{self.date}",
+                f"{BASE_URL}/{stock['company_code']}/{self.date}",
                 headers={"Authorization": f"Bearer {POLYGON_API_KEY}"},
                 meta={"stock": stock},
             )
@@ -32,6 +39,6 @@ class PolygonSpider(scrapy.Spider):
 
     def parse(self, response):
         stock = response.meta['stock']
-        stock['performance'] = response.json()
+        stock['stock_values'] = response.json()
 
         yield stock
