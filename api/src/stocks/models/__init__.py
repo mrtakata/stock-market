@@ -1,14 +1,16 @@
 from .Competitor import Competitor
 from .MarketCap import MarketCap
-from .PerformanceData import PerformanceData
-from .StockValue import StockValue
+from .Performance import Performance
 from .Stock import Stock
+from .StockUpdate import StockUpdate
+from .StockValues import StockValues
 
 
 __all__ = [
     "Competitor",
     "MarketCap",
-    "PerformanceData",
-    "StockValue",
+    "Performance",
     "Stock",
+    "StockUpdate",
+    "StockValues",
 ]

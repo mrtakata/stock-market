@@ -1,16 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select
+
 from api.src.stocks.models import *
+from api.database import get_session
 
-
-fake_stock_db = {
-    "GOOGL": {
-        "company_name": "Alphabet Inc.",
-        "stock_values": StockValue(open=1000.0, high=1100.0, low=990.0, close=1050.0),
-        "performance_data": PerformanceData(five_days=0.05, one_month=0.1, three_months=0.2, year_to_date=0.3, one_year=0.5),
-        "competitors": [Competitor(name="Microsoft"), Competitor(name="Apple Inc.")],
-        "market_cap": MarketCap(currency="USD", value=2000000000000.0)
-    }
-}
+SessionDep = Annotated[Session, Depends(get_session)]
 
 router = APIRouter(
     prefix="/stocks",
@@ -19,18 +15,23 @@ router = APIRouter(
 )
 
 @router.get("/{stock_symbol}")
-async def get_stock(stock_symbol: str):
+async def get_stock(stock_symbol: str, session: SessionDep):
     # TODO: Implements connection to DB
-    if stock_symbol not in fake_stock_db:
+    stock = session.exec(select(Stock).where(Stock.company_code == stock_symbol)).one()
+    if stock is None:
         raise HTTPException(status_code=404, detail="Stock not found")
-    
-    stock = fake_stock_db[stock_symbol]
+
     return stock
 
 
 @router.post("/{stock_symbol}")
-async def update_stock(stock_symbol: str):
-    # This is a stub, we are not actually updating the stock
-    if stock_symbol not in fake_stock_db:
-        raise HTTPException(status_code=404, detail="Stock not found")
-    return {"message": f"Stock {stock_symbol} has been updated successfully."}
+async def update_stock(stock_symbol: str, update_data: StockUpdate, session: SessionDep):
+    stock = session.exec(select(Stock).where(Stock.company_code == stock_symbol)).one()
+    print(stock)
+    stock.purchased_amount += update_data.amount
+    stock.purchased_status = "Purchased"
+
+    session.add(stock)
+    session.commit()
+    session.refresh(stock)
+    return stock

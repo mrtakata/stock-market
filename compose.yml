@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: fastapi_admin
+      POSTGRES_PASSWORD: AOsd4V9CIrLf75R9x
+      POSTGRES_DB: stock_market
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
