@@ -27,30 +27,24 @@ own `.toml` file so that one can easily verify which libraries are used in each 
 broken down into different repositories depending on the structure chosen.
 
 
-## Instalation
+## Setup
 
-For each project, before running, you should go to the related folder and do:
-
-`poetry install`
-
-Also, a Postgres instance is needed to run the project. For this, in the root folder, you can run
+To setup a Postgres and api instance, you can run:
 
 `docker-compose up -d`
 
-These environment variables were already set as example for this project, but you can change for your project.
+These environment variables for the database were already set as example for this project, but you can change for your project.
 ```
   POSTGRES_USER: fastapi_admin
   POSTGRES_PASSWORD: AOsd4V9CIrLf75R9x
   POSTGRES_DB: stock_market
 ```
 
+For crawlers and etl, before running, you should go to the related folder and do:
+
+`poetry install`
+
 ## Usage
-
-### API
-
-Create a `.env` file setting up `POSTGRES_URL=postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}`
-
-And, inside the folder, run: `poetry run fastapi dev main.py`
 
 ### Crawlers
 
@@ -93,5 +87,6 @@ The crawlers were built using:
 close__stocksticker___date) ✅
 - Performance and Competitors needs to be scraped from the MarketWatch stock page using received stock symbol, available in available in the following path: https://www.marketwatch.com/investing/stock/<stock_symbol>. Ex: https://www.marketwatch.com/investing/stock/aapl ✅
 - The solution should be able to update companies listed on https://www.marketwatch.com/tools/markets/stocks/country/united-states. ✅
-- Create a Dockerfile that builds an image containing the ready-to-run API application. One should be able to invoke “docker run” and interact with the API
+- Create a Dockerfile that builds an image containing the ready-to-run API application. One should be able to invoke “docker run” and interact with the API ✅
 - The application should display meaningful logs for the application
+- Automated Tests
