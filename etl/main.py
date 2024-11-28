@@ -91,6 +91,6 @@ if __name__ == "__main__":
     data = read_jl("data/stocks.jl")
     with open("data/stocks.json", "w") as f:
         json.dump(data, f)
-    # create_db_and_tables()
-    # load_stocks(data)
-    update_stocks(data)
+    create_db_and_tables()
+    load_stocks(data)
+    # update_stocks(data)

@@ -11,12 +11,9 @@ class Stock(SQLModel, table=True):
     purchased_amount: int = Field(default=0)
     purchased_status: str = Field(default="Not Purchased")
     request_data: datetime = Field(default=datetime(2024, 11, 21))
-    company_code: str = Field(unique=True)
+    company_code: str = Field(unique=True, index=True)
     company_name: str
     performance_data: Optional["Performance"] = Relationship(back_populates="stock")
     market_cap: Optional["MarketCap"] = Relationship(back_populates="stock")
     stock_values: Optional["StockValue"] = Relationship(back_populates="stock")
     competitors: List["Competitor"] = Relationship(back_populates="stock")
-
-    class Config:
-        arbitrary_types_allowed = True
