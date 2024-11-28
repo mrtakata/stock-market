@@ -2,15 +2,11 @@ from datetime import datetime
 from typing import Optional, List
 from datetime import datetime
 from sqlmodel import Field, SQLModel, Relationship
-from api.src.stocks.models import (
-    Competitor,
-    CompetitorBase,
-    MarketCap,
-    MarketCapBase,
-    Performance,
-    PerformanceBase,
-    StockValue,
-)
+from api.src.stocks.models.Competitor import Competitor, CompetitorBase
+from api.src.stocks.models.MarketCap import MarketCap, MarketCapBase
+from api.src.stocks.models.Performance import Performance, PerformanceBase
+from api.src.stocks.models.StockValue import StockValue, StockValueBase
+
 
 class StockBase(SQLModel):
     status: str = Field(default="OK")
@@ -31,5 +27,5 @@ class StockWithRelations(StockBase):
     id: int
     performance_data: Optional["PerformanceBase"] = None
     market_cap: Optional["MarketCapBase"] = None
-    # stock_values: Optional["StockValueBase"] = None
+    stock_values: Optional["StockValueBase"] = None
     competitors: List["CompetitorBase"] = []
