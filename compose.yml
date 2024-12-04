@@ -7,9 +7,10 @@ services:
     restart: always
     ports:
       - "8000:8000"
-    network_mode: host
+    networks:
+      - app-network
     environment:
-      - DATABASE_URL=postgresql://fastapi_admin:AOsd4V9CIrLf75R9x@db/stock_market
+      - POSTGRES_URL=postgresql://fastapi_admin:AOsd4V9CIrLf75R9x@db/stock_market
     depends_on:
       - db
 
